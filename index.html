@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <link rel="icon" href="data:,">
+  <title>Closera revenue ledger</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Revenue operations</p>
+      <h1 id="brand">Closera Collective</h1>
+      <p id="updated" class="muted">Loading ledger…</p>
+    </div>
+    <div class="header-actions">
+      <span id="demo-badge" class="badge hidden">Sample data</span>
+      <button id="theme-toggle" class="button" type="button" aria-label="Switch color theme">Dark</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="status" class="status" aria-live="polite">
+      <span id="status-text">Loading dashboard…</span>
+      <button id="retry" class="button hidden" type="button">Retry</button>
+    </section>
+
+    <section class="dashboard-section hidden" aria-labelledby="month-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">This month</p><h2 id="month-title">Operating pulse</h2></div>
+      </div>
+      <div id="kpis" class="kpi-grid"></div>
+    </section>
+
+    <section class="dashboard-section hidden" aria-labelledby="performance-title">
+      <div class="section-heading split">
+        <div><p class="eyebrow">People</p><h2 id="performance-title">Performance ledger</h2></div>
+        <div class="segmented" role="group" aria-label="Performance window">
+          <button type="button" data-window="month" aria-pressed="true">Month</button>
+          <button type="button" data-window="all_time" aria-pressed="false">All time</button>
+        </div>
+      </div>
+      <p class="muted mobile-hint">Scroll tables sideways for every metric.</p>
+      <div class="two-column">
+        <article class="panel"><h3>Setters</h3><div id="setters"></div></article>
+        <article class="panel"><h3>Closers</h3><div id="closers"></div></article>
+      </div>
+    </section>
+
+    <section class="dashboard-section hidden" aria-labelledby="commission-title">
+      <div class="section-heading"><div><p class="eyebrow">Settlement</p><h2 id="commission-title">Commission ledger</h2></div></div>
+      <article class="panel">
+        <p class="muted ledger-note">Earned, paid, and owed are since each role's latest settlement. This month is calendar-month earnings.</p>
+        <div id="commissions"></div><p id="operator-note" class="notice hidden"></p>
+      </article>
+    </section>
+
+    <section class="dashboard-section hidden" aria-labelledby="source-title">
+      <div class="section-heading"><div><p class="eyebrow">Acquisition</p><h2 id="source-title">Source funnel</h2><p id="source-window" class="muted"></p></div></div>
+      <article class="panel"><div id="sources"></div></article>
+    </section>
+
+    <section class="dashboard-section two-column hidden" aria-label="Funnel and recent cash">
+      <article class="panel"><p class="eyebrow">Journey</p><h2>Existing funnel</h2><div id="funnel" class="stat-list"></div></article>
+      <article class="panel"><p class="eyebrow">Cash log</p><h2>Recent payments</h2><div id="payments"></div></article>
+    </section>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

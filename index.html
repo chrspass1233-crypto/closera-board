@@ -1,72 +1,37 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="referrer" content="no-referrer">
-  <link rel="icon" href="data:,">
-  <title>Closera revenue ledger</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer"><link rel="icon" href="data:,">
+  <title>Closera team dashboard</title><link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="topbar">
-    <div>
-      <p class="eyebrow">Revenue operations</p>
-      <h1 id="brand">Closera Collective</h1>
-      <p id="updated" class="muted">Loading ledger…</p>
-    </div>
-    <div class="header-actions">
-      <span id="demo-badge" class="badge hidden">Sample data</span>
-      <button id="theme-toggle" class="button" type="button" aria-label="Switch color theme">Dark</button>
-    </div>
-  </header>
-
+  <aside class="rail" aria-label="Dashboard navigation">
+    <div class="brand-mark">C</div><div class="rail-copy"><strong id="brand">Closera Collective</strong><span>Team dashboard</span></div>
+    <div class="rail-tools"><span id="demo-badge" class="sample hidden">Sample</span><button id="theme-toggle" class="theme-button" type="button" aria-label="Switch color theme">Dark</button></div>
+  </aside>
   <main>
-    <section id="status" class="status" aria-live="polite">
-      <span id="status-text">Loading dashboard…</span>
-      <button id="retry" class="button hidden" type="button">Retry</button>
-    </section>
-
-    <section class="dashboard-section hidden" aria-labelledby="month-title">
-      <div class="section-heading">
-        <div><p class="eyebrow">This month</p><h2 id="month-title">Operating pulse</h2></div>
-      </div>
-      <div id="kpis" class="kpi-grid"></div>
-    </section>
-
-    <section class="dashboard-section hidden" aria-labelledby="performance-title">
-      <div class="section-heading split">
-        <div><p class="eyebrow">People</p><h2 id="performance-title">Performance ledger</h2></div>
-        <div class="segmented" role="group" aria-label="Performance window">
-          <button type="button" data-window="month" aria-pressed="true">Month</button>
-          <button type="button" data-window="all_time" aria-pressed="false">All time</button>
-        </div>
-      </div>
-      <p class="muted mobile-hint">Scroll tables sideways for every metric.</p>
-      <div class="two-column">
-        <article class="panel"><h3>Setters</h3><div id="setters"></div></article>
-        <article class="panel"><h3>Closers</h3><div id="closers"></div></article>
-      </div>
-    </section>
-
-    <section class="dashboard-section hidden" aria-labelledby="commission-title">
-      <div class="section-heading"><div><p class="eyebrow">Settlement</p><h2 id="commission-title">Commission ledger</h2></div></div>
-      <article class="panel">
-        <p class="muted ledger-note">Earned, paid, and owed are since each role's latest settlement. This month is calendar-month earnings.</p>
-        <div id="commissions"></div><p id="operator-note" class="notice hidden"></p>
-      </article>
-    </section>
-
-    <section class="dashboard-section hidden" aria-labelledby="source-title">
-      <div class="section-heading"><div><p class="eyebrow">Acquisition</p><h2 id="source-title">Source funnel</h2><p id="source-window" class="muted"></p></div></div>
-      <article class="panel"><div id="sources"></div></article>
-    </section>
-
-    <section class="dashboard-section two-column hidden" aria-label="Funnel and recent cash">
-      <article class="panel"><p class="eyebrow">Journey</p><h2>Existing funnel</h2><div id="funnel" class="stat-list"></div></article>
-      <article class="panel"><p class="eyebrow">Cash log</p><h2>Recent payments</h2><div id="payments"></div></article>
-    </section>
-  </main>
-  <script type="module" src="app.js"></script>
+    <section id="status" class="status" aria-live="polite"><span id="status-text">Loading dashboard...</span><button id="retry" class="quiet-button hidden" type="button">Retry</button></section>
+    <div class="dashboard-section hidden">
+      <header class="page-heading"><div><h1>Team dashboard</h1><p>Sales, cash and commissions in one place.</p></div><p id="updated" class="as-of">As of today</p></header>
+      <section id="kpis" class="hero" aria-label="This month"></section>
+      <section aria-labelledby="performance-title">
+        <div class="section-heading"><div><h2 id="performance-title">Leaderboard</h2><p>Ranked by cash collected.</p></div><div class="segmented" role="group" aria-label="Leaderboard window"><button type="button" data-window="month" aria-pressed="true">Month</button><button type="button" data-window="all_time" aria-pressed="false">All time</button></div></div>
+        <div class="role-tabs" role="group" aria-label="Leaderboard role"><button type="button" data-role="setters" aria-pressed="true">Setters</button><button type="button" data-role="closers" aria-pressed="false">Closers</button></div>
+        <div class="people-grid"><article class="surface" data-role-panel="setters"><h3>Setters</h3><div id="setters"></div></article><article class="surface" data-role-panel="closers"><h3>Closers</h3><div id="closers"></div></article></div>
+      </section>
+      <section aria-labelledby="commission-title">
+        <div class="section-heading"><div><h2 id="commission-title">Commissions</h2><p>Owed since each role's latest settlement.</p></div></div>
+        <div id="commissions" class="commission-grid"></div><p id="operator-note" class="estimate-note hidden"></p>
+      </section>
+      <section aria-labelledby="source-title">
+        <div class="section-heading"><div><h2 id="source-title">Source funnel</h2><p id="source-window">Calendar month</p></div></div><div id="sources" class="source-grid"></div>
+      </section>
+      <section class="support-grid" aria-label="Funnel and recent cash">
+        <details class="surface compact-details" open><summary><span><strong>Existing funnel</strong><small>Full journey</small></span></summary><div id="funnel" class="stat-list"></div></details>
+        <details class="surface compact-details" open><summary><span><strong>Recent payments</strong><small>Latest cash received</small></span></summary><div id="payments"></div></details>
+      </section>
+    </div>
+  </main><script type="module" src="app.js"></script>
 </body>
 </html>

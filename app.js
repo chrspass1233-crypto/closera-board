@@ -3,6 +3,7 @@ import { renderDashboard } from "./render.js";
 
 let dashboard;
 let windowName = "month";
+let roleName = "setters";
 
 function setStatus(message, retry = false) {
   document.querySelector("#status-text").textContent = message;
@@ -14,6 +15,17 @@ function render() {
   document.querySelectorAll("[data-window]").forEach((button) => {
     button.setAttribute("aria-pressed", String(button.dataset.window === windowName));
   });
+  syncCompactDetails();
+}
+
+function syncCompactDetails() {
+  const open = !window.matchMedia("(max-width: 760px)").matches;
+  document.querySelectorAll(".compact-details").forEach((details) => { details.open = open; });
+}
+
+function syncRole() {
+  document.body.dataset.role = roleName;
+  document.querySelectorAll("button[data-role]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.role === roleName)));
 }
 
 async function load() {
@@ -47,7 +59,9 @@ document.querySelectorAll("[data-window]").forEach((button) => button.addEventLi
   windowName = button.dataset.window;
   if (dashboard) render();
 }));
+document.querySelectorAll("button[data-role]").forEach((button) => button.addEventListener("click", () => { roleName = button.dataset.role; syncRole(); }));
 document.querySelector("#retry").addEventListener("click", load);
 setupTheme();
-window.matchMedia("(max-width: 480px)").addEventListener("change", () => { if (dashboard) render(); });
+syncRole();
+window.matchMedia("(max-width: 760px)").addEventListener("change", () => { if (dashboard) render(); });
 load();

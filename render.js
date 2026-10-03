@@ -15,7 +15,7 @@ function format(value, kind) {
   if (kind === "rate") return `${(number * 100).toFixed(1)}%`;
   return integer.format(number);
 }
-function metric(label, value) { const item = node("span", undefined, "metric"); item.append(node("small", label), node("strong", value)); return item; }
+function metric(label, value) { const item = node("span", undefined, String(value).includes("$") ? "metric money" : "metric"); item.append(node("small", label), node("strong", value)); return item; }
 function empty(target, message = "No records in this window.") { target.replaceChildren(node("p", message, "empty")); }
 
 function kpis(data) {
@@ -25,6 +25,8 @@ function kpis(data) {
   const secondary = node("div", undefined, "hero-stats");
   secondary.append(metric("Closes", format(values.closes)), metric("Show rate", format(values.show_rate, "rate")), metric("Close rate", format(values.close_rate, "rate")));
   document.querySelector("#kpis").replaceChildren(primary, secondary);
+  const missing = document.querySelector("#missing-forms");
+  missing.replaceChildren("Calls missing a Post Call form: ", node("span", format(values.unlogged), "numeric"));
 }
 
 function peopleList(target, rows, setter) {
@@ -97,7 +99,7 @@ function funnel(data) {
 }
 function payments(data) {
   const target = document.querySelector("#payments"); const rows = data.recent_payouts ?? []; if (!rows.length) return empty(target, "No recent payments."); const list = node("div", undefined, "payment-list");
-  rows.forEach((row) => { const item = node("div", undefined, "payment"); const date = new Date(row.received_at); const copy = node("div"); copy.append(node("strong", row.client_name), node("span", `${row.platform} · ${Number.isNaN(date.getTime()) ? "Date unavailable" : laDay.format(date)}`)); item.append(copy, node("strong", format(row.amount, "money"))); list.append(item); }); target.replaceChildren(list);
+  rows.forEach((row) => { const item = node("div", undefined, "payment"); const date = new Date(row.received_at); const copy = node("div"); copy.append(node("strong", row.client_name), node("span", `${row.platform} · ${Number.isNaN(date.getTime()) ? "Date unavailable" : laDay.format(date)}`)); item.append(copy, node("strong", format(row.amount, "money"), "money")); list.append(item); }); target.replaceChildren(list);
 }
 export function renderDashboard(data, windowName = "month") {
   document.querySelector("#brand").textContent = clean(data.brand ?? "Closera Collective");

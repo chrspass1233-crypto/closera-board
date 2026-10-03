@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 import { dashboardMode, loadDashboard } from "./data.js";
 
 test("demo ignores a supplied key and uses no-store sample request", async () => {
@@ -19,6 +20,14 @@ test("missing key is concise and no request is made", async () => {
   let called = false;
   await assert.rejects(() => loadDashboard("", async () => { called = true; }), /Missing dashboard key/);
   assert.equal(called, false);
+});
+
+test("dashboard renders the missing Post Call form count", () => {
+  const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
+  const render = readFileSync(new URL("./render.js", import.meta.url), "utf8");
+  assert.match(html, /id="missing-forms"/);
+  assert.match(render, /Calls missing a Post Call form:/);
+  assert.match(render, /values\.unlogged/);
 });
 
 test("network errors never echo the key or request URL", async () => {

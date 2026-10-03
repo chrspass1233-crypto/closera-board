@@ -1,20 +1,21 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer"><link rel="icon" href="data:,">
-  <title>Closera team dashboard</title><link rel="stylesheet" href="styles.css">
+  <title>Closera team dashboard</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=JetBrains+Mono:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <aside class="rail" aria-label="Dashboard navigation">
     <div class="brand-mark">C</div><div class="rail-copy"><strong id="brand">Closera Collective</strong><span>Team dashboard</span></div>
-    <div class="rail-tools"><span id="demo-badge" class="sample hidden">Sample</span><button id="theme-toggle" class="theme-button" type="button" aria-label="Switch color theme">Dark</button></div>
+    <div class="rail-tools"><span id="demo-badge" class="sample hidden">Sample</span></div>
   </aside>
   <main>
     <section id="status" class="status" aria-live="polite"><span id="status-text">Loading dashboard...</span><button id="retry" class="quiet-button hidden" type="button">Retry</button></section>
     <div class="dashboard-section hidden">
       <header class="page-heading"><div><h1>Team dashboard</h1><p>Sales, cash and commissions in one place.</p></div><p id="updated" class="as-of">As of today</p></header>
       <section id="kpis" class="hero" aria-label="This month"></section>
+      <p id="missing-forms" class="missing-forms"></p>
       <section aria-labelledby="performance-title">
         <div class="section-heading"><div><h2 id="performance-title">Leaderboard</h2><p>Ranked by cash collected.</p></div><div class="segmented" role="group" aria-label="Leaderboard window"><button type="button" data-window="month" aria-pressed="true">Month</button><button type="button" data-window="all_time" aria-pressed="false">All time</button></div></div>
         <div class="role-tabs" role="group" aria-label="Leaderboard role"><button type="button" data-role="setters" aria-pressed="true">Setters</button><button type="button" data-role="closers" aria-pressed="false">Closers</button></div>

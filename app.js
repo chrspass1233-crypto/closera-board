@@ -43,17 +43,6 @@ async function load() {
   }
 }
 
-function setupTheme() {
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  document.documentElement.dataset.theme = prefersDark ? "dark" : "light";
-  const button = document.querySelector("#theme-toggle");
-  const sync = () => { button.textContent = document.documentElement.dataset.theme === "dark" ? "Light" : "Dark"; };
-  button.addEventListener("click", () => {
-    document.documentElement.dataset.theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    sync();
-  });
-  sync();
-}
 
 document.querySelectorAll("[data-window]").forEach((button) => button.addEventListener("click", () => {
   windowName = button.dataset.window;
@@ -61,7 +50,6 @@ document.querySelectorAll("[data-window]").forEach((button) => button.addEventLi
 }));
 document.querySelectorAll("button[data-role]").forEach((button) => button.addEventListener("click", () => { roleName = button.dataset.role; syncRole(); }));
 document.querySelector("#retry").addEventListener("click", load);
-setupTheme();
 syncRole();
 window.matchMedia("(max-width: 760px)").addEventListener("change", () => { if (dashboard) render(); });
 load();

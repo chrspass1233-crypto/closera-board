@@ -18,15 +18,36 @@ function format(value, kind) {
 function metric(label, value) { const item = node("span", undefined, String(value).includes("$") ? "metric money" : "metric"); item.append(node("small", label), node("strong", value)); return item; }
 function empty(target, message = "No records in this window.") { target.replaceChildren(node("p", message, "empty")); }
 
-function kpis(data) {
+const currency0 = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+function plural(count, word) { return `${integer.format(count)} ${word}${Number(count) === 1 ? "" : "s"}`; }
+
+function cashPerCustomer(data, windowName) {
+  const values = data.leaderboard?.[windowName]?.totals ?? {};
+  const known = values.cash_per_customer !== undefined && values.customers !== undefined;
+  const tile = node("div", undefined, "hero-cpc");
+  const label = `Cash per customer · ${windowName === "month" ? "Month" : "All time"}`;
+  tile.append(node("span", label), node("strong", known ? currency0.format(Number(values.cash_per_customer)) : "Not available", "money"),
+    node("small", known ? `${plural(values.customers, "customer")}` : "Needs the updated scoreboard"));
+  return tile;
+}
+
+function kpis(data, windowName = "month") {
   const values = data.leaderboard?.month?.totals ?? {};
   const primary = node("div", undefined, "hero-primary");
   primary.append(node("span", "Cash this month"), node("strong", format(values.cash, "money")));
   const secondary = node("div", undefined, "hero-stats");
   secondary.append(metric("Closes", format(values.closes)), metric("Show rate", format(values.show_rate, "rate")), metric("Close rate", format(values.close_rate, "rate")));
-  document.querySelector("#kpis").replaceChildren(primary, secondary);
+  document.querySelector("#kpis").replaceChildren(primary, cashPerCustomer(data, windowName), secondary);
   const missing = document.querySelector("#missing-forms");
   missing.replaceChildren("Calls missing a Post Call form: ", node("span", format(values.unlogged), "numeric"));
+}
+
+function missingForms(count) {
+  const open = Number(count ?? 0);
+  const item = metric("Missing forms", format(open));
+  item.classList.add("forms", open > 0 ? "forms-open" : "forms-clear");
+  if (open > 0) item.title = "Calls past due with no Post Call form. No form, no next lead.";
+  return item;
 }
 
 function peopleList(target, rows, setter) {
@@ -43,6 +64,7 @@ function peopleList(target, rows, setter) {
     quick.append(metric(setter ? "Calls set" : "Calls taken", format(setter ? row.calls_set : row.calls_taken)));
     if (setter) quick.append(metric("Showed", format(row.shows)), metric("Show rate", format(row.show_rate, "rate")));
     quick.append(metric("Closed", format(row.closes)), metric("Close rate", format(row.close_rate, "rate")));
+    if (!setter) quick.append(missingForms(row.unlogged));
     item.append(head, quick); list.append(item);
   });
   target.replaceChildren(list);
@@ -104,5 +126,5 @@ function payments(data) {
 export function renderDashboard(data, windowName = "month") {
   document.querySelector("#brand").textContent = clean(data.brand ?? "Closera Collective");
   document.querySelector("#updated").textContent = clean(`As of ${String(data.commissions?.as_of ?? "today").slice(0, 10)}`);
-  kpis(data); people(data, windowName); commissionLedger(data); sourceLedger(data, windowName); funnel(data); payments(data);
+  kpis(data, windowName); people(data, windowName); commissionLedger(data); sourceLedger(data, windowName); funnel(data); payments(data);
 }
